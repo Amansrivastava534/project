@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'question.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,9 +33,42 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  List<Icon> scoreKeeper= [
+  List<Icon> scoreKeeper= [];
+  List<String> question =[
+    'In an instance method or a constructor, "this" is a reference to the current object',
+    'Garbage Collection is manual process.',
+    'The JRE deletes objects when it determines that they are no longer being used. This process is called Garbage Collection.',
+    'Constructor overloading is not possible in Java.',
+    'Assignment operator is evaluated Left to Right.',
+    'All binary operators except for the assignment operators are evaluated from Left to Right',
+    'Java programming is not statically-typed, means all variables should not first be declared before they can be used.',
+
 
   ];
+
+
+
+
+  List<bool> answers=[
+    true,
+    true,
+    false,
+    true,
+    false,
+    false,
+    true,
+    false,
+
+
+  ];
+
+  int questionNumber=0;
+//TODO: Question Change
+  void increseNumber(){
+    questionNumber++ ;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -46,7 +80,7 @@ class _QuizPageState extends State<QuizPage> {
           child: Padding(
             padding: EdgeInsets.all(10.0),
             child: Center(
-              child: Text('This is where the question text will go',
+              child: Text(question[questionNumber],
                 textAlign:TextAlign.center,
               style: TextStyle(
                 fontSize: 25.0,
@@ -68,11 +102,24 @@ class _QuizPageState extends State<QuizPage> {
                 ),
                 ),
                 onPressed: (){
+                  bool correctAnswer=answers[questionNumber];
+
                   setState(() {
-                    scoreKeeper.add(
-                      Icon(Icons.check,color: Colors.green,
+                    increseNumber();
+                    if(correctAnswer==true){
+                      scoreKeeper.add(
+                        Icon(Icons.check,color: Colors.green,
+                        ),
+                      );
+                    }else{
+                      scoreKeeper.add(Icon(
+                        Icons.close,
+                        color: Colors.red,
                       ),
-                    );
+
+                      );
+                    }
+
                   });
 
 
@@ -97,13 +144,24 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: (){
-                setState(() {
-                  scoreKeeper.add(Icon(
-                    Icons.close,
-                    color: Colors.red,
-                  ),
+                bool correctAnswer=answers[questionNumber];
 
-                  );
+                setState(() {
+                  if(correctAnswer==false){
+                    scoreKeeper.add(
+                      Icon(Icons.check,color: Colors.green,
+                      ),
+                    );
+                  }else{
+                    scoreKeeper.add(Icon(
+                      Icons.close,
+                      color: Colors.red,
+                    ),
+
+                    );
+                  }
+                  increseNumber();
+
 
                 });
 
