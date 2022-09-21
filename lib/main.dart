@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'question.dart';
+import 'quiz_brain.dart';
+
+QuizBrain quizBrain=QuizBrain();
 
 void main() {
   runApp(const MyApp());
@@ -34,39 +37,58 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper= [];
-  List<String> question =[
-    'In an instance method or a constructor, "this" is a reference to the current object',
-    'Garbage Collection is manual process.',
-    'The JRE deletes objects when it determines that they are no longer being used. This process is called Garbage Collection.',
-    'Constructor overloading is not possible in Java.',
-    'Assignment operator is evaluated Left to Right.',
-    'All binary operators except for the assignment operators are evaluated from Left to Right',
-    'Java programming is not statically-typed, means all variables should not first be declared before they can be used.',
+
+  void checkAnswer(bool userPickedAnswer) {
+    bool correctAnswer = quizBrain.getCorrectAnswer();
+
+    setState(() {
+      //TODO: Step 4 - Use IF/ELSE to check if we've reached the end of the quiz. If so,
+      //On the next line, you can also use if (quizBrain.isFinished()) {}, it does the same thing.
+      if (quizBrain.isFinished() == true) {
+        //TODO Step 4 Part A - show an alert using rFlutter_alert,
+
+        //This is the code for the basic alert from the docs for rFlutter Alert:
+        //Alert(context: context, title: "RFLUTTER", desc: "Flutter is awesome.").show();
+
+        //Modified for our purposes:
 
 
-  ];
 
 
+        //TODO Step 4 Part C - reset the questionNumber,
+        quizBrain.reset();
 
+        //TODO Step 4 Part D - empty out the scoreKeeper.
+        scoreKeeper = [];
+      }
 
-  List<bool> answers=[
-    true,
-    true,
-    false,
-    true,
-    false,
-    false,
-    true,
-    false,
-
-
-  ];
-
-  int questionNumber=0;
-//TODO: Question Change
-  void increseNumber(){
-    questionNumber++ ;
+      //TODO: Step 6 - If we've not reached the end, ELSE do the answer checking steps below 👇
+      else {
+        if (userPickedAnswer == correctAnswer) {
+          scoreKeeper.add(Icon(
+            Icons.check,
+            color: Colors.green,
+          ));
+        } else {
+          scoreKeeper.add(Icon(
+            Icons.close,
+            color: Colors.red,
+          ));
+        }
+        quizBrain.nextQuestion();
+      }
+    });
   }
+
+
+
+
+
+
+
+
+//TODO: Question Change
+  void increseNumb()=> quizBrain.nextQuestion();
 
 
   @override
@@ -80,7 +102,8 @@ class _QuizPageState extends State<QuizPage> {
           child: Padding(
             padding: EdgeInsets.all(10.0),
             child: Center(
-              child: Text(question[questionNumber],
+              child: Text(
+                quizBrain.getQuestionText(),
                 textAlign:TextAlign.center,
               style: TextStyle(
                 fontSize: 25.0,
@@ -102,25 +125,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
                 ),
                 onPressed: (){
-                  bool correctAnswer=answers[questionNumber];
-
-                  setState(() {
-                    increseNumber();
-                    if(correctAnswer==true){
-                      scoreKeeper.add(
-                        Icon(Icons.check,color: Colors.green,
-                        ),
-                      );
-                    }else{
-                      scoreKeeper.add(Icon(
-                        Icons.close,
-                        color: Colors.red,
-                      ),
-
-                      );
-                    }
-
-                  });
+                  checkAnswer(true);
 
 
                 },
@@ -144,29 +149,8 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: (){
-                bool correctAnswer=answers[questionNumber];
-
-                setState(() {
-                  if(correctAnswer==false){
-                    scoreKeeper.add(
-                      Icon(Icons.check,color: Colors.green,
-                      ),
-                    );
-                  }else{
-                    scoreKeeper.add(Icon(
-                      Icons.close,
-                      color: Colors.red,
-                    ),
-
-                    );
-                  }
-                  increseNumber();
-
-
-                });
-
-
-              },
+                checkAnswer(false);
+                },
               style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)
               ),
             ),
@@ -181,5 +165,6 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 }
+
 
 

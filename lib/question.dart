@@ -1,10 +1,12 @@
-class Question{
-  late String questionText;
-  late bool questionAnswer;
+import 'package:flutter/cupertino.dart';
 
-  Question({String? q,bool? a}){
-    questionText!=a;
-    questionAnswer!=a;
+class Question {
+  String questionText='Hello';
+  bool questionAnswer=true;
+
+  Question({String q='',bool a=true}) {
+    questionText = q;
+    questionAnswer = a;
   }
-
 }
+
